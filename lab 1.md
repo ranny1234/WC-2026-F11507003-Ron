@@ -315,7 +315,7 @@ Find the PDU Session Establishment Accept and record the UE address:
 
 | Field | Observed value |
 |---|---|
-| UE IPv4 address |  |
+| UE IPv4 address |10.0.0.2|
 
 Apply:
 
@@ -328,8 +328,11 @@ Find one ICMP Echo Request and its Echo Reply. Confirm that the UE's IP packet i
 Answer:
 
 1. What IPv4 address was assigned to the UE?
+   - 10.0.0.2
 2. How many ICMP Echo Request/Reply pairs are present?
+   - 10
 3. What does the successful Echo Reply prove about the UE connection?
+   - the successful echo reply proves the reachability to the target, and so successfully transported between the gNB to UPF via GTP-U
 
 ### Checkpoint 5: UE IP and User Plane — 15 points
 
@@ -365,6 +368,32 @@ You may use:
 
 ```text
 Statistics → Flow Graph → Displayed packets
+```
+
+```mermaid
+sequenceDiagram
+    participant UE
+    participant gNB
+    participant AMF
+    participant UPF
+    participant DN as Data Network
+
+    UE->>gNB: RRCSetupRequest
+    gNB->>UE: RRCSetup
+    UE->>gNB: RRCSetupComplete, Registration Request  
+
+    gNB->>AMF: InitialUEMessage
+
+    AMF->>gNB: Authentication Request
+    gNB->>AMF: Authentication Response
+
+    AMF->>gNB: PDUSessionResourceSetupRequest
+    gNB->>AMF: PDUSessionResourceSetupResponse
+ 
+    gNB->>UPF: GTP-U
+    UPF->>DN: ICMP Echo Request
+    DN->>UPF: ICMP Echo Reply
+    UPF->>gNB: GTP-U
 ```
 
 However, the OAI RAN packets use loopback addresses. Manually separate the UE and gNB in your final diagram according to the RRC message direction.
