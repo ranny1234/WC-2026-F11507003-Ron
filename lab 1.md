@@ -113,8 +113,11 @@ Analyze → Enabled Protocols
 Submit:
 
 - A screenshot showing that the `OAI-5G` profile is selected. — 3 points
+  <img width="446" height="319" alt="image" src="https://github.com/user-attachments/assets/45450796-29cd-48de-b506-5cfbf687b4f0" />
 - A screenshot showing the opened capture. — 2 points
+  <img width="959" height="504" alt="image" src="https://github.com/user-attachments/assets/40c5f95c-c4c2-4a0c-b7de-290b374685c5" />
 - A screenshot showing NR RRC packets after applying `nr-rrc`. — 5 points
+  <img width="959" height="502" alt="image" src="https://github.com/user-attachments/assets/09900d57-d743-4397-93d0-758ad95c6d42" />
 
 ---
 
@@ -144,19 +147,19 @@ Complete the table:
 
 | Component | IP address | Evidence from the capture |
 |---|---|---|
-| UE PDU address |  |  |
-| gNB |  |  |
-| AMF |  |  |
-| UPF |  |  |
-| Data Network |  |  |
+| UE PDU address |10.0.0.2|<img width="958" height="503" alt="image" src="https://github.com/user-attachments/assets/1e6d5d38-824f-4f57-bc09-a66da0bb24b4" />|
+| gNB |192.168.70.129|<img width="959" height="504" alt="image" src="https://github.com/user-attachments/assets/86290b6c-4e22-4a46-bb0f-e3c48d2ba900" />|
+| AMF |192.168.70.132|<img width="959" height="505" alt="image" src="https://github.com/user-attachments/assets/5bfc93fa-23f9-4585-8916-2af27c851a1c" />|
+| UPF |192.168.70.134|<img width="959" height="503" alt="image" src="https://github.com/user-attachments/assets/73f14b9e-d852-4fe9-9c6f-27f747592592" />|
+| Data Network |192.168.70.135|<img width="959" height="504" alt="image" src="https://github.com/user-attachments/assets/60cc78b3-2fe0-4174-baf5-4266e386ed9a" />|
 
 Complete the interface table:
 
 | Interface | Connected components | Main protocol | Purpose |
 |---|---|---|---|
-| N1 |  |  |  |
-| N2 |  |  |  |
-| N3 |  |  |  |
+| N1 |UE - AMF|NAS|registration messages|
+| N2 |gNB - AMF|NGAP|gNB-core messages  |
+| N3 |gNB - UPF|GTP-U|Tunnel for UE IP packets|
 
 The logical architecture is:
 
@@ -207,18 +210,23 @@ Complete the table:
 
 | Message | Direction | Logical channel / SRB | Main purpose | Packet number |
 |---|---|---|---|---:|
-| RRCSetupRequest |  |  |  |  |
-| RRCSetup |  |  |  |  |
-| RRCSetupComplete |  |  |  |  |
+| RRCSetupRequest |up|Common Control Channel|Before Conncetion|104|
+| RRCSetup |down|Common Control Channel|gNB sets up SRB1|105|
+| RRCSetupComplete |up|Dedicated Control Channel|After setup|108|
 
 Answer the following questions:
-
 1. What is the establishment cause in `RRCSetupRequest`?
+   - the establishment cause is that the UE asks gNB
 2. What SRB does `RRCSetupRequest` use? Why?
+   - SRB0
 3. Which side sends `RRCSetup`?
+   - the UE side
 4. Which signaling radio bearer is used after the RRC connection is established?
+   - SRB1
 5. Which NAS message is carried inside `RRCSetupComplete`?
+   - dedicates NAS message registration request
 6. At the end of this procedure, is the UE only connected to the gNB, or is it already registered with the 5G Core? Explain.
+   - the UE is only connected to the gNB and is not registered with the 5G core, the establishment only means that UE can exchange control messages with gNB, but does not mean that the 5G core is registered, as for it to be registered, the core network has to accept the UE
 
 ### Checkpoint 3: RRC Connection Establishment 
 
@@ -266,8 +274,8 @@ Compare the two packets:
 
 | Stage | Protocol message | Sender → receiver | Encapsulated information |
 |---|---|---|---|
-| Radio side | RRCSetupComplete |  |  |
-| Core side | NGAP InitialUEMessage |  |  |
+| Radio side | RRCSetupComplete |UE - gNB|<img width="959" height="504" alt="image" src="https://github.com/user-attachments/assets/06ac546d-bf9f-431b-a181-13d324271c25" />|
+| Core side | NGAP InitialUEMessage |gNB - AMF|<img width="959" height="503" alt="image" src="https://github.com/user-attachments/assets/e5bd79d4-d9e8-4a1d-9102-6e501c5fdd44" />|
 
 Finally, locate:
 
