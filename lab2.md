@@ -59,11 +59,22 @@ Complete the table:
 
 | Scenario | Reverse value | Direction |
 | --- | ---: | --- |
-| A | | |
-| B | | |
-| C | | |
+| A |1|downlink|
+| B |0|uplink|
+| C |0|uplink|
 
 **Question:** Does the traffic direction shown in the JSON match the scenario description? Show the proof.
+Scenario A:
+The traffic direction matches the scenario description as reverse is 1 so downlink
+<img width="958" height="505" alt="image" src="https://github.com/user-attachments/assets/d2baff14-1321-45c0-89dd-8dac4fadac41" />
+
+Scenario B:
+The traffic direction matches the scenario description as reverse is 0 so uplink
+<img width="959" height="503" alt="image" src="https://github.com/user-attachments/assets/8274ff4b-343b-496f-822e-67335a0553ca" />
+
+Scenario C:
+The traffic direction matches the scenario description as reverse is 0 so uplink
+<img width="959" height="504" alt="image" src="https://github.com/user-attachments/assets/dbb20dbf-28c5-4e8a-b985-09ea01547791" />
 
 ## 4. Task 2 — Compare Throughput
 
@@ -83,9 +94,9 @@ Complete the table:
 
 | Scenario | Direction | Throughput (Mbps) |
 | --- | --- | ---: |
-| A | Downlink | |
-| B | Uplink | |
-| C | Uplink | |
+| A | Downlink |90.65|
+| B | Uplink |109.12|
+| C | Uplink |124.42|
 
 Calculate how much C improves over B:
 
@@ -95,10 +106,10 @@ Improvement (%) = (C - B) ÷ B × 100
 
 Answer:
 
-1. What is the downlink throughput in Scenario A?
-2. What is the uplink throughput in Scenario B?
-3. Is the uplink throughput higher in B or C?
-4. By approximately what percentage does C improve over B?
+1. What is the downlink throughput in Scenario A? - 90.65
+2. What is the uplink throughput in Scenario B? - 109.12
+3. Is the uplink throughput higher in B or C? - It is higher in C
+4. By approximately what percentage does C improve over B? 14.02%
 
 > Use the JSON `bits_per_second` value. Do not recalculate throughput using the other time fields.
 
@@ -115,14 +126,17 @@ Complete the table:
 
 | Scenario | Throughput (Mbps) | Packet loss (%) | Jitter (ms) |
 | --- | ---: | ---: | ---: |
-| B | | | |
-| C | | | |
+| B |109.12|0.24|0.116|
+| C |124.42|2.13|0.162|
 
 Answer:
 
 1. Does C have higher uplink throughput than B?
+Compared with Scenario B, Scenario C has 124.42 throughput while Scenario B has 109.12 throughput. Hence, this suggests that C has a higher uplink throughput than B
 2. Does C have lower packet loss than B?
+Compared with Scenario B, Scenario C has 2.13% packet loss while Scenario B has 0.24% packet loss. Hence, this suggests that C has a higher packet loss than B
 3. What trade-off, if any, is visible when changing from B to C?
+The only trade-off is seen from the higher throughput where it shifts the network profile from a reliable, consistent stream to  a high capacity one.
 
 A simple answer format is:
 
