@@ -417,13 +417,13 @@ Record the number of displayed packets:
 
 | Scenario | Displayed TCP retransmissions |
 | --- | ---: |
-| A | |
-| B | |
-| C | |
+| A | 14 |
+| B | 12 |
+| C | 12 |
 
 > Report the number displayed by Wireshark using the specified filter. Counts may vary with Wireshark analysis settings. Include screenshots showing the filter and displayed count for each scenario. The filter includes any TCP flows that Wireshark can decode in the capture; a displayed retransmission is not, by itself, proof of loss in the UDP test.
 
-**Question:** Do these TCP retransmissions directly represent lost UDP performance packets?
+**Question:** Do these TCP retransmissions directly represent lost UDP performance packets? - No, as TCP and UDP are different transport protocols
 
 ## 10. Task 8 — RTT and Packet Interval
 
@@ -441,7 +441,7 @@ Select one packet from the iperf3 TCP control connection and record its ACK RTT:
 
 | Scenario | Packet number | Example TCP ACK RTT |
 | --- | ---: | --- |
-| A, B, or C | | |
+| A, B, or C | 1432 | 315ms |
 
 This value is the RTT of the TCP control connection. It is not the RTT of the UDP data packets.
 
@@ -461,7 +461,7 @@ Record the scenario, display filter, packet numbers, and time interval.
 
 | Scenario | Display filter | Packet numbers | Time interval |
 | --- | --- | --- | --- |
-| | | | |
+| C | udp | 33 | 10.476ms |
 
 **Note:** The time interval depends on the applied display filter. Make sure the selected packets are distinct data packets, not duplicated observations from different capture points. Do not use their interval to infer the TDD slot pattern.
 
@@ -469,14 +469,14 @@ Record the scenario, display filter, packet numbers, and time interval.
 
 Answer each question in two or three sentences:
 
-1. Does Scenario A use a TDD setting that matches its traffic direction?
-2. Why is Scenario B expected to have limited uplink resources? Cite a parameter or count from the DL-heavy SIB1 reference configuration.
-3. How much does uplink throughput change from B to C?
-4. What negative result, if any, is visible in C? Support your answer with packet loss or jitter values.
-5. Why can increasing UL resources improve uplink throughput?
-6. Is adding more UL resources always the best solution? Explain using throughput and packet loss.
-7. Suggest one simple follow-up test that could improve throughput without producing too much packet loss.
-8. What can the configuration captures tell you that the iperf3 JSON cannot? Why are separately recorded configuration captures not direct proof of the configuration during an earlier test?
+1. Does Scenario A use a TDD setting that matches its traffic direction? - Scenario A uses a DL-heavy TDD setting for downlink traffic, where it allocated 104 DL symbol out of 140, so there are more resources for downlink transmission opportunities. Hence, it matches the downlink traffic direction.
+2. Why is Scenario B expected to have limited uplink resources? Cite a parameter or count from the DL-heavy SIB1 reference configuration. - Scenario B uses a DL-heavy setting, despite it having uplink traffic and so it will have limited uplink resources, where we saw the uplink slots being 2 and uplink symbols being 4 as compared to the downlink slots of 7 and symbols of 6.
+3. How much does uplink throughput change from B to C? - There was a throughput change of 14.02% from B to C, as we see from the values of the throughput of C being 124.42 while B being 104.12.
+4. What negative result, if any, is visible in C? Support your answer with packet loss or jitter values. - the negative results visible in C are from the higher packet loss and jitter, where we see the packet loss of C being 2.13 as compared to B of 0.24 and jitter of 0.162 compared to B of 0.116.
+5. Why can increasing UL resources improve uplink throughput? - An increase in UL resources provides more transmission opportunities for uplink data, C has higher UL symbols per 5ms of 64 compared to that of 32 for B, this allows more uplink data to be scheduled within the same time interval and so this increase in UL allocation improves uplink throughput by increase the transmission capacity.
+6. Is adding more UL resources always the best solution? Explain using throughput and packet loss. - adding more UL resources while improving uplink throughput does not guarantee better overall performance, as we could see by doing so in Scenario C, it resulted in an increase in packet loss and so this increase in packet loss may not actually translate to more successful data delivered due to the increase in throughput. 
+7. Suggest one simple follow-up test that could improve throughput without producing too much packet loss. - We could adjust the iperf3 UDP sending rate while keeping Scenario C balanced TDD setting, as we aim to find the highest sending rate, without increasing packet loss and while also ensuring an acceptable throughput. 
+8. What can the configuration captures tell you that the iperf3 JSON cannot? Why are separately recorded configuration captures not direct proof of the configuration during an earlier test? - This is because, configuration captures provide information about the network TDD settings while iperf3 JSON reports performance measurements such as the throughput, packet loss and jitter but does not help to identify the TDD setting.
 
 ## 12. Submission Checklist
 
