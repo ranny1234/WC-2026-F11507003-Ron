@@ -59,9 +59,9 @@ Complete the table:
 
 | Scenario | Reverse value | Direction |
 | --- | ---: | --- |
-| A |1|downlink|
-| B |0|uplink|
-| C |0|uplink|
+| A | 1 | downlink |
+| B | 0 | uplink |
+| C | 0 | uplink |
 
 **Question:** Does the traffic direction shown in the JSON match the scenario description? Show the proof.
 Scenario A:
@@ -94,9 +94,9 @@ Complete the table:
 
 | Scenario | Direction | Throughput (Mbps) |
 | --- | --- | ---: |
-| A | Downlink |90.65|
-| B | Uplink |109.12|
-| C | Uplink |124.42|
+| A | Downlink | 90.65 |
+| B | Uplink | 109.12 |
+| C | Uplink | 124.42 |
 
 Calculate how much C improves over B:
 
@@ -217,19 +217,24 @@ Complete the table for `pattern1`:
 
 | Item | DL-heavy: A/B | Balanced: C |
 | --- | --- | --- |
-| Configuration capture filename | | |
-| SIB1 packet number | | |
-| `referenceSubcarrierSpacing` (kHz) | | |
-| `dl-UL-TransmissionPeriodicity` (ms) | | |
-| `nrofDownlinkSlots` | | |
-| `nrofDownlinkSymbols` | | |
-| `nrofUplinkSlots` | | |
-| `nrofUplinkSymbols` | | |
-| Is `pattern2` present? | | |
+| Configuration capture filename | tdd-dl-heavy-sib1.pcapng | tdd-balanced-sib1.pcapng |
+| SIB1 packet number | 2 | 2 |
+| `referenceSubcarrierSpacing` (kHz) | 30 | 30 |
+| `dl-UL-TransmissionPeriodicity` (ms) | 5 | 2.5 |
+| `nrofDownlinkSlots` | 7 | 2 |
+| `nrofDownlinkSymbols` | 6 | 6 |
+| `nrofUplinkSlots` | 2 | 2 |
+| `nrofUplinkSymbols` | 4 | 4 |
+| Is `pattern2` present? | no | no |
 
 If `pattern2` is present, add another table containing its period and four slot/symbol counts. It uses the same reference SCS.
 
 Take **one screenshot per configuration** showing the selected SIB1 packet and the expanded TDD fields. Include `pattern2` in an additional screenshot if it is present and does not fit.
+
+DL-heavy:
+<img width="959" height="504" alt="image" src="https://github.com/user-attachments/assets/c92ab814-6c53-4322-a3a5-35124ee94e5d" />
+Balanced:
+<img width="956" height="504" alt="image" src="https://github.com/user-attachments/assets/1937e636-ea6f-4503-bbf6-9b93e27ebb86" />
 
 ### 4.4 Draw the TDD Time Allocation
 
@@ -262,6 +267,8 @@ Use **D = downlink**, **U = uplink**, and **F = flexible**. Include a legend, th
 
 If `pattern2` is present, draw `pattern1` followed by `pattern2`; the combined sequence repeats. Label each pattern boundary and show the full combined duration.
 
+<img width="490" height="131" alt="image" src="https://github.com/user-attachments/assets/8f13d47e-0133-4b6e-aebb-21584120b6b9" />
+
 First, count the symbols over **one complete repeating sequence** for each configuration. The two sequences may have different durations, so their raw UL symbol counts alone cannot be used to compare resources per unit time:
 
 ```text
@@ -275,17 +282,17 @@ For two patterns, sum the counts and durations of both patterns before calculati
 
 | TDD setting | Repeating duration (ms) | Total reference slots | DL symbols | UL symbols | Flexible symbols | Configured UL symbol share (%) |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| DL-heavy | | | | | | |
-| Balanced | | | | | | |
+| DL-heavy | 5 | 10 | 6 | 4 | 4 | 28.6 |
+| Balanced | 2.5 | 5 | 6 | 4 | 4 | 28.6 |
 
 Next, count the symbols over the **same 5 ms interval** shown in your diagrams. Multiply each per-sequence count by the number of complete repetitions in 5 ms. For these captures, 5 ms contains a whole number of repetitions for both configurations.
 
 | TDD setting | Repeating duration (ms) | Repetitions in 5 ms | DL symbols in 5 ms | UL symbols in 5 ms | Flexible symbols in 5 ms |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| DL-heavy | | | | | |
-| Balanced | | | | | |
+| DL-heavy | 5 | 1 | 104 | 32 | 4 |
+| Balanced | 2.5 | 2 | 68 | 64 | 8 |
 
-**Question:** Can two patterns have the same UL symbol count per period but provide different numbers of UL symbols per unit time? Explain using your two tables.
+**Question:** Can two patterns have the same UL symbol count per period but provide different numbers of UL symbols per unit time? Explain using your two tables. - Yes, as we can see from the table, both DL-heavy and Balanced has the same amount of UL symbols and so this means that their UL symbol count per period would be the same. However, since Balanced has 2 repetitions in 5ms, this would result in Balanced having 64 UL symbols in 5ms, so a higher number of UL symbols per unit time while having the same UL symbol count per period as DL-heavy.
 
 ### 4.5 Connect SIB1 to the Performance Results
 
@@ -293,16 +300,16 @@ Use the supplied mapping between the reference configuration captures and scenar
 
 | Scenario | Reference TDD setting | JSON traffic direction | Configured UL symbol share (%) | Throughput (Mbps) | Packet loss (%) |
 | --- | --- | --- | ---: | ---: | ---: |
-| A | DL-heavy | | | | |
-| B | DL-heavy | | | | |
-| C | Balanced | | | | |
+| A | DL-heavy | downlink | 28.6 | 90.6 | 0.44  |
+| B | DL-heavy | uplink | 28.6 | 109.12 | 0.24 |
+| C | Balanced | uplink | 28.6 | 124.42 | 2.13|
 
 Answer:
 
-1. Which decoded TDD parameters differ between DL-heavy and balanced?
-2. Which configuration provides more configured UL symbols per unit time? Support your answer with the diagram and calculated share.
-3. How does that difference help explain the B/C throughput comparison?
-4. Why can A and B use the same SIB1 TDD configuration even though their traffic directions differ?
+1. Which decoded TDD parameters differ between DL-heavy and balanced? - the throughput and packet loss are different.
+2. Which configuration provides more configured UL symbols per unit time? Support your answer with the diagram and calculated share. - Balanced will have more configured UL symbols per unit time, as seen from the table before, Balanced has more repetitions in 5ms which will result in it having more UL symbols per unit time.
+3. How does that difference help explain the B/C throughput comparison? - as C has more UL symbols per unit time, it is able to hold a larger capacity and so this would result in a higher throughput as compared to B.
+4. Why can A and B use the same SIB1 TDD configuration even though their traffic directions differ? - this is because SIB1 determines the downlink, uplink and flexible symbol allocation rather than the traffic direction
 
 > More configured UL resources can provide more opportunities for uplink traffic, but they do not guarantee a proportional throughput increase. Scheduling, radio conditions, overhead, offered traffic, and other radio settings also affect the result. This comparison does not establish that the TDD pattern is the only cause of a performance difference. SIB1 does not show actual slot-by-slot data scheduling. Because the configuration captures were recorded separately, use them as references for the supplied settings, not as independent proof of what was broadcast during each original performance run.
 
@@ -328,8 +335,8 @@ nr-rrc.prach_ConfigurationIndex
 
 | TDD setting | SIB1 packet number | PRACH configuration index |
 | --- | ---: | ---: |
-| DL-heavy | | |
-| Balanced | | |
+| DL-heavy | 2 | 98 |
+| Balanced | 2 | 98 |
 
 PRACH is used to send a random-access preamble. Its configuration index is not the DL/UL slot ratio and does not directly explain iperf3 throughput. Equal indices in the two configurations are a valid observation. Drawing PRACH occasions requires additional parameters and the applicable TS 38.211 table; it is outside the required TDD drawing task.
 
@@ -339,9 +346,9 @@ Complete the table using the supplied scenario mapping, the SIB1 reference confi
 
 | Scenario | TDD setting | Traffic direction | Is the setting suitable for this direction? Why? |
 | --- | --- | --- | --- |
-| A | DL-heavy | Downlink | |
-| B | DL-heavy | Uplink | |
-| C | Balanced | Uplink | |
+| A | DL-heavy | Downlink | yes, there is more downlink slots than uplink slots, and so provides more downlink transmission opportunities. Furthermore, DL-heavy setting is suitable for downlink traffic, so this setting is suitable for the downlink direction |
+| B | DL-heavy | Uplink | no, it is not suitable for the uplink direction, as there is more downlink slots than uplink slots, so providing more downlink transmission opportunities, with DL-heavy setting also being more suitable for downlink traffic. Ultimately, it is not suitabe for uplink direction |
+| C | Balanced | Uplink | yes, since Balanced has equal uplink and downlink slots, we focus on balanced setting giving more uplink transmission opportunities which would mean uplink is the suitable direction |
 
 Use these ideas:
 
@@ -353,7 +360,7 @@ Use these ideas:
 
 > The configuration captures show the reference broadcast TDD settings. The iperf3 JSON reports performance; it does not contain TDD parameters. The scenario captures are used for traffic analysis and need not include SIB1.
 
-**Question:** Why might Scenario C achieve better uplink throughput than Scenario B? Refer to your SIB1 diagrams and measured results.
+**Question:** Why might Scenario C achieve better uplink throughput than Scenario B? Refer to your SIB1 diagrams and measured results. - this is because in scenario C, the Balanced shows that uplink and downlink slots are the same but for DL-heavy we see that the downlink slots are more than the uplink slots which would result in there being more uplink transmission opportunities. Furthermore, since a balanced setting gives uplink traffic more opportunities than DL-heavy setting, this combined findings would result in Scenario C achieving a better uplink throughput than Scenario B. 
 
 ## 8. Task 6 — Find GTP-U Information
 
