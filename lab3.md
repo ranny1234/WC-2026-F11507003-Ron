@@ -109,20 +109,21 @@ Complete the table:
 
 | Item | Observed Value |
 |---|---|
-| gNB process ID | |
-| nrUE process ID | |
-| RFsimulator transport protocol | |
-| RFsimulator port | |
-| TCP connection state | |
-| Connected process(es) | |
+| gNB process ID | 9675 |
+| nrUE process ID | 12990 |
+| RFsimulator transport protocol | TCP |
+| RFsimulator port | 4043 |
+| TCP connection state | ESTAB |
+| Connected process(es) | nr-softmodem (gNB, PID 9675) , nr-uesoftmodem (nrUE, PID 12990) |
 
-Take one screenshot showing the TCP connection.
+Take one screenshot showing the TCP connection. - <img width="864" height="142" alt="image" src="https://github.com/user-attachments/assets/244cfb78-21aa-4e2e-8beb-1af0138d9efd" />
+
 
 **Questions:**
 
-1. Why does RFsimulator use a TCP connection instead of a physical antenna?
-2. Are the TCP packets exchanged by RFsimulator the same as the UE's application-layer IP packets?
-3. Does using RFsimulator mean that the UE and gNB are performing no physical-layer processing? Explain.
+1. Why does RFsimulator use a TCP connection instead of a physical antenna? - it helps to provide reliable ordered delivery of simulated radio samples between the gNB and nrUE
+2. Are the TCP packets exchanged by RFsimulator the same as the UE's application-layer IP packets? - No, they are different
+3. Does using RFsimulator mean that the UE and gNB are performing no physical-layer processing? Explain. - No, RFsimulator does not eliminate the physical-layer processing, UE and gNB still performs the physical layer operations of modulation, demodulation, channel coding, decoding, synchronization and signaling, it only replaces the physical hardware
 
 ## 5. Task 3 — Verify End-to-End Connectivity
 
