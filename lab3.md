@@ -143,22 +143,24 @@ Record:
 
 | Measurement | Observed Value |
 |---|---|
-| UE IP address | |
-| Destination IP | |
-| Packets transmitted | |
-| Packets received | |
-| Packet loss (%) | |
-| Minimum RTT (ms) | |
-| Average RTT (ms) | |
-| Maximum RTT (ms) | |
+| UE IP address | 10.0.0.2/24 |
+| Destination IP | 192.168.70.135 |
+| Packets transmitted | 10 |
+| Packets received | 10 |
+| Packet loss (%) | 0 |
+| Minimum RTT (ms) | 23.668 |
+| Average RTT (ms) | 27.780 |
+| Maximum RTT (ms) | 30.966 |
 
 Take a screenshot of the Ping result.
+<img width="791" height="254" alt="image" src="https://github.com/user-attachments/assets/2fa94720-0c0a-45c4-bb21-92bd844a805f" />
+
 
 **Questions:**
 
-1. Why must Ping use the `oaitun_ue1` interface in this experiment?
-2. Does successful Registration guarantee successful user-plane connectivity?
-3. What does a successful Ping prove, and what does it not prove about the simulated 5G system?
+1. Why must Ping use the `oaitun_ue1` interface in this experiment? - it allows the experiment to specifically test for connectivity through the OAI 5G network
+2. Does successful Registration guarantee successful user-plane connectivity? - No, it does not
+3. What does a successful Ping prove, and what does it not prove about the simulated 5G system? - it proves that end to end IP connectivity is established between the UE and the destination but does not prove that the 5G system accurately represents a real-world network performance
 
 ## 6. Task 4 — Investigate the Effect of Packet Size
 
@@ -190,23 +192,24 @@ Complete the table:
 
 | Scenario | ICMP Payload | Avg. RTT (ms) | Max. RTT (ms) | Packet Loss (%) |
 |---|---:|---:|---:|---:|
-| A | 56 bytes | | | |
-| B | 512 bytes | | | |
-| C | 1200 bytes | | | |
+| A | 56 bytes | 24.093 | 30.126 | 0 |
+| B | 512 bytes | 28.732 | 34.950 | 0 |
+| C | 1200 bytes | 35.188 | 61.250 | 0 |
 
 Calculate the RTT difference:
 
 ```text
 RTT Difference = Average RTT(C) - Average RTT(A)
 ```
+11.095
 
 **Questions:**
 
-1. Which scenario has the highest average RTT?
-2. Does increasing packet size always increase RTT in your measurements?
-3. Why might a larger packet require more transmission or processing resources?
-4. What factors other than packet size could affect RTT in a software-based 5G network?
-5. Can these results be interpreted as real over-the-air 5G latency? Explain.
+1. Which scenario has the highest average RTT? - Scenario C
+2. Does increasing packet size always increase RTT in your measurements? - Yes
+3. Why might a larger packet require more transmission or processing resources? - larger packets contain more data, which would need more transmission and processing resources 
+4. What factors other than packet size could affect RTT in a software-based 5G network? - RTT can be affected by CPU utilization, memory availability, operating system scheduling, network congestion and virtualization overhead
+5. Can these results be interpreted as real over-the-air 5G latency? Explain. - No
 
 Do not assume that RTT must increase with packet size. Use your measured values to support your explanation.
 
@@ -250,12 +253,13 @@ Complete the table:
 
 | Item | Observation |
 |---|---|
-| Modified parameter | |
-| UE synchronized with gNB? | |
-| RRC connection established? | |
-| Registration successful? | |
-| Error or rejection evidence | |
-| Likely cause | |
+| Modified parameter | IMSI |
+| UE synchronized with gNB? | Yes |
+| RRC connection established?  Yes| |
+| Registration successful? | No |
+| Error or rejection evidence | <img width="628" height="314" alt="image" src="https://github.com/user-attachments/assets/ca1eb719-d71b-4b05-97f7-6955a79f3cff" />
+ |
+| Likely cause | "Received Registration reject message too short" |
 
 If the expected registration rejection does not appear, report the actual logs instead of inventing a failure message.
 
@@ -267,14 +271,15 @@ Restart the nrUE using:
 --uicc0.imsi 001010000000001
 ```
 
-Confirm that the UE successfully registers again and that Ping works.
+Confirm that the UE successfully registers again and that Ping works. - <img width="954" height="143" alt="image" src="https://github.com/user-attachments/assets/055f77ff-aabf-467b-9ea0-8b160a4cb0ad" />
+
 
 **Questions:**
 
-1. Why can the UE potentially synchronize with the gNB even when the IMSI is incorrect?
-2. Which network function is involved in UE authentication?
-3. Why does changing an IMSI affect Registration but not the RFsimulator TCP connection itself?
-4. What evidence proves that restoring the correct configuration solved the problem?
+1. Why can the UE potentially synchronize with the gNB even when the IMSI is incorrect? -UE can synchronize with the gNB because radio synchronization occurs at the physical layer and does not require IMSI authentication
+2. Which network function is involved in UE authentication? - Authentication Server Function
+3. Why does changing an IMSI affect Registration but not the RFsimulator TCP connection itself? - changing the IMSI affects registration because the IMSI identifies the subscriber and is used during authentication with the 5G Core Network
+4. What evidence proves that restoring the correct configuration solved the problem? - the evidence is seen from the "Authentication successful by network" and "5GMM-Registered" messages
 
 Submit evidence from both the failed and recovered connections.
 
@@ -287,29 +292,29 @@ Complete the comparison:
 
 | Feature | OAI RFsimulator | Physical 5G System |
 |---|---|---|
-| gNB and UE protocol stack | | |
-| OFDM signal processing | | |
-| Physical antennas | | |
-| RF hardware impairments | | |
-| Wireless propagation effects | | |
-| 5G Core connectivity | | |
+| gNB and UE protocol stack | implemented in software | implemented in hardware and software |
+| OFDM signal processing | performed using software | performed using physical systems |
+| Physical antennas | none | needed for wireless transmissions |
+| RF hardware impairments | not actually present, it is simulated | present |
+| Wireless propagation effects | not actually present, it is modelled | present |
+| 5G Core connectivity | done through simulation | supported through a 5G core |
 
 **Questions:**
 
-1. Which parts of the 5G system remain functional when physical RF hardware is replaced with RFsimulator?
-2. Why is RFsimulator useful for testing the 5G protocol stack?
-3. Why might latency and throughput differ between RFsimulator and a real 5G deployment?
-4. What would need to change if you wanted to test a physical UE instead of OAI nrUE?
+1. Which parts of the 5G system remain functional when physical RF hardware is replaced with RFsimulator? - the 5G protocol stack remains functional such as the PHY, MAC, RLC, PDCP, RRC and NAS layers. Physical-layer operations such as OFDM modulation, demodulation, channel coding and decoding are still performed in software.
+2. Why is RFsimulator useful for testing the 5G protocol stack? - it allows testing without the need of expensive equipment 
+3. Why might latency and throughput differ between RFsimulator and a real 5G deployment? - RFsimulator does not inherently reproduce real-world wireless conditions such as interference, fading, path loss, and mobility
+4. What would need to change if you wanted to test a physical UE instead of OAI nrUE? - the simulated radio interface would need to be replaced with compatible RF hardware
 
 ## 9. Final Analysis
 
 Answer each question in three to five sentences.
 
-1. Describe the complete process from starting the OAI 5GC to successful user-plane connectivity.
-2. Explain the difference between an RFsimulator TCP connection and a 5G PDU Session.
-3. Based on your measurements, how did packet size affect RTT and packet loss?
-4. Describe the registration failure you introduced and explain how you diagnosed and recovered from it.
-5. Identify two limitations of this simulated environment and explain how they might affect experimental results.
+1. Describe the complete process from starting the OAI 5GC to successful user-plane connectivity. - OAI 5G Core Network is started by docker, the gNB starts and establishes an NG connection and the nrUE connects to the gNB through RFSimulator, the UE then undergoes authentication and registration with 5G Core
+2. Explain the difference between an RFsimulator TCP connection and a 5G PDU Session. - RFsimulator TCP connection is used to transport simulated radio samples between the gNB and nrUE. While, a 5G PDU Session is a logical data connection established between the UE and the 5G data network through the 5G Core
+3. Based on your measurements, how did packet size affect RTT and packet loss? - increasing packet size resulted in an increase in RTT, as larger packets require more transmission resources. However, packet loss remained at 0% from the measurements for all different packet sizes.
+4. Describe the registration failure you introduced and explain how you diagnosed and recovered from it. - a controlled registration failure was introduced by changing the UE IMSI from 001010000000001 to 001010000000099. The failure was investigated by examining the AMF logs which showed that the modified UE remained in the 5GMM-DEREGISTERED state. To recover, the nrUE was stopped and restarted using the original IMSI 001010000000001
+5. Identify two limitations of this simulated environment and explain how they might affect experimental results. - the absence of realistic wireless propagation conditions, it may result it the accuracy of the signal quality in a real-world scenario. dependence on software and host computing resources, this could result in processing delays, as it is dependent on the computer processing power
 
 ## 10. Submission Checklist
 
