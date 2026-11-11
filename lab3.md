@@ -55,21 +55,28 @@ Observe their terminal outputs and locate evidence of the following stages.
 
 | Stage | Successful? | Evidence from logs |
 |---|---|---|
-| CN5G initialization | | |
-| gNB NG Setup | | |
-| UE synchronization | | |
-| RRC connection establishment | | |
-| UE Registration | | |
-| PDU Session Establishment | | |
-| UE tunnel creation | | |
+| CN5G initialization | Successful | <img width="668" height="379" alt="image" src="https://github.com/user-attachments/assets/69149e85-7821-442d-bd5a-0ff2ebb36360" />
+ |
+| gNB NG Setup | Successful | <img width="959" height="475" alt="image" src="https://github.com/user-attachments/assets/b206839d-5d64-4e99-a5c9-67d30e6824f6" />
+ |
+| UE synchronization | Succesful | <img width="664" height="375" alt="image" src="https://github.com/user-attachments/assets/1a146a24-0db6-43e2-a6d3-8755404807ec" />
+ |
+| RRC connection establishment | Successful | <img width="959" height="505" alt="image" src="https://github.com/user-attachments/assets/b37073b7-9856-408d-b92a-dcb92317e82c" />
+ |
+| UE Registration | Successful | <img width="959" height="500" alt="image" src="https://github.com/user-attachments/assets/2bb3dab5-aee4-46a0-a73e-454528c8ca1d" />
+ |
+| PDU Session Establishment | Successful | <img width="959" height="507" alt="image" src="https://github.com/user-attachments/assets/65a124bd-2360-4433-9e19-0debf2fb0bef" />
+ |
+| UE tunnel creation | Successful | <img width="670" height="345" alt="image" src="https://github.com/user-attachments/assets/090d314f-dc74-4897-b76c-a5574c72b426" />
+ |
 
 Take screenshots showing the gNB and UE successfully connected.
 
 **Questions:**
 
-1. Does a successful NG Setup guarantee that a UE can register? Explain.
-2. Why can the UE establish an RRC connection but still fail Registration?
-3. What additional procedure is required after Registration before user data can be exchanged?
+1. Does a successful NG Setup guarantee that a UE can register? Explain. - No, NG setup only establishes the NG control plane connection between gNB and AMF, while UE registration requires successful authentication, security establishment and NAS signaling 
+2. Why can the UE establish an RRC connection but still fail Registration? - RRC connection establishment and UE registration occur at different protocol layers 
+3. What additional procedure is required after Registration before user data can be exchanged? - PDU Session Establishment 
 
 ## 4. Task 2 — Investigate RFsimulator Communication
 
