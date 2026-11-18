@@ -244,8 +244,8 @@ f1ap
 
 Find and record these messages:
 
-| Message | Typical direction | Meaning |
-|---|---|---|
+| Message | Typical direction | Meaning | Evidence | 
+|---|---|---|---|
 | SCTP INIT / INIT_ACK / COOKIE_ECHO / COOKIE_ACK | DU ↔ CU | Establish SCTP association | <img width="957" height="36" alt="image" src="https://github.com/user-attachments/assets/26b50822-a95c-4c46-b32b-9123088a40ef" /> |
 | F1 Setup Request | DU → CU | DU initiates F1 connection and provides served-cell information | <img width="959" height="24" alt="image" src="https://github.com/user-attachments/assets/92bad04e-4b22-453b-8fe9-bd7dc38a83e6" /> |
 | F1 Setup Response | CU → DU | CU accepts F1 Setup | <img width="959" height="24" alt="image" src="https://github.com/user-attachments/assets/a400d5e2-6ffc-4ff4-b0a9-2497b2d7ec52" /> |
