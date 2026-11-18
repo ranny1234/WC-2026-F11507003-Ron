@@ -91,12 +91,14 @@ grep -nE \
 ```
 
 **Record:** The CU and DU F1 addresses, the DU SSB frequency, and PRB count. If the local settings differ from the table above, adapt the following commands and capture filters accordingly.
+CU F1 Address: 127.0.0.3, DU F1 Address: 127.0.0.4, DU SSB Frequency: 630048
+<img width="669" height="378" alt="image" src="https://github.com/user-attachments/assets/e929aabb-d02a-44bd-8ccc-2cb1baa969ad" />
 
 **Questions**
 
-1. Which protocol layers mainly reside in the CU, and which reside in the DU?
-2. What is the purpose of the F1 interface?
-3. Why must the UE radio frequency be compatible with the DU rather than taken blindly from the previous lab?
+1. Which protocol layers mainly reside in the CU, and which reside in the DU? - in the CU we have RRC signaling and connection mangement, PDCP layer and in the DU we have RLC, MAC and PHY
+2. What is the purpose of the F1 interface? - F1-C purpose is to control plane where it inspects procedures while F1-U purpose is to for the user plane where it inspects the TEID, direction and inner IP
+3. Why must the UE radio frequency be compatible with the DU rather than taken blindly from the previous lab? - because both must operate on the same carrier frequency and use compatible radio parameters to establish synchronization and communication.
 
 ---
 
@@ -159,6 +161,18 @@ ping -I oaitun_ue1 -c 10 192.168.70.135
 
 **Evidence:** Screenshots of CU/DU startup, UE connection, and successful Ping. Record the observed UE IP, transmitted/received packets, packet loss, and average RTT. Do **not** invent values; they vary by machine.
 
+CU startup:
+<img width="959" height="503" alt="image" src="https://github.com/user-attachments/assets/7483c152-194a-4021-adc0-dca23025ee67" />
+
+DU startup:
+<img width="958" height="505" alt="image" src="https://github.com/user-attachments/assets/901644f4-9806-4913-8059-e7e9a9d31aa3" />
+
+UE connection and successful ping:
+<img width="667" height="379" alt="image" src="https://github.com/user-attachments/assets/1a6b6f89-0097-49d3-9b71-b085242263bb" />
+
+UE IP: 10.0.0.2/24, Transmitted Packets: 10, Received Packets: 10, Packet Loss: 0%, Average RTT: 26.723
+
+
 ---
 
 ## 5. Task 3 — Capture F1-C and F1-U in a single PCAP
@@ -196,6 +210,8 @@ ping -I oaitun_ue1 -c 30 -i 0.2 192.168.70.135
 ```bash
 ls -lh ~/lab4-f1-complete.pcap
 ```
+<img width="661" height="379" alt="image" src="https://github.com/user-attachments/assets/c8fd5ad7-5758-469f-9496-5339ff8c6469" />
+
 
 ### Alternative: capture all traffic between CU and DU
 
@@ -230,25 +246,26 @@ Find and record these messages:
 
 | Message | Typical direction | Meaning |
 |---|---|---|
-| SCTP INIT / INIT_ACK / COOKIE_ECHO / COOKIE_ACK | DU ↔ CU | Establish SCTP association |
-| F1 Setup Request | DU → CU | DU initiates F1 connection and provides served-cell information |
-| F1 Setup Response | CU → DU | CU accepts F1 Setup |
-| GNBDUConfigurationUpdate | DU → CU | DU informs CU of configuration changes |
-| Initial UL RRC Message Transfer (RRC Setup Request) | DU → CU | UE initial RRC request forwarded to CU |
-| DL RRC Message Transfer (RRC Setup) | CU → DU | CU delivers RRC Setup toward UE |
-| UL RRC Message Transfer (RRC Setup Complete) | DU → CU | UE completes RRC procedure; NAS Registration Request can be carried inside |
-| UE Context Setup Request / Response | CU ↔ DU | Establish UE-specific resources/context |
-| DL RRC Message Transfer (RRC Reconfiguration) | CU → DU | CU sends further RRC configuration |
+| SCTP INIT / INIT_ACK / COOKIE_ECHO / COOKIE_ACK | DU ↔ CU | Establish SCTP association | <img width="957" height="36" alt="image" src="https://github.com/user-attachments/assets/26b50822-a95c-4c46-b32b-9123088a40ef" /> |
+| F1 Setup Request | DU → CU | DU initiates F1 connection and provides served-cell information | <img width="959" height="24" alt="image" src="https://github.com/user-attachments/assets/92bad04e-4b22-453b-8fe9-bd7dc38a83e6" /> |
+| F1 Setup Response | CU → DU | CU accepts F1 Setup | <img width="959" height="24" alt="image" src="https://github.com/user-attachments/assets/a400d5e2-6ffc-4ff4-b0a9-2497b2d7ec52" /> |
+| GNBDUConfigurationUpdate | DU → CU | DU informs CU of configuration changes | <img width="959" height="28" alt="image" src="https://github.com/user-attachments/assets/bc1f08b3-995b-4056-961f-bf081e1a921a" /> |
+| Initial UL RRC Message Transfer (RRC Setup Request) | DU → CU | UE initial RRC request forwarded to CU | <img width="950" height="33" alt="image" src="https://github.com/user-attachments/assets/6bde5518-188c-4b6f-9642-e157fcd2bdd3" /> |
+| DL RRC Message Transfer (RRC Setup) | CU → DU | CU delivers RRC Setup toward UE | <img width="935" height="22" alt="image" src="https://github.com/user-attachments/assets/1e9c2857-d074-4384-9212-bfd963a14125" /> |
+| UL RRC Message Transfer (RRC Setup Complete) | DU → CU | UE completes RRC procedure; NAS Registration Request can be carried inside | <img width="935" height="34" alt="image" src="https://github.com/user-attachments/assets/3dd684b0-6026-439c-a06a-a0501e3f3689" /> |
+| UE Context Setup Request / Response | CU ↔ DU | Establish UE-specific resources/context | <img width="935" height="16" alt="image" src="https://github.com/user-attachments/assets/f65667ee-492b-4b1e-996f-7b999822887e" /> |
+| DL RRC Message Transfer (RRC Reconfiguration) | CU → DU | CU sends further RRC configuration | <img width="959" height="28" alt="image" src="https://github.com/user-attachments/assets/14dcc8ff-2a07-487c-9089-d76d684bb6d7" /> |
 
 **Observed classroom sequence:** The successful capture contained SCTP association, F1 Setup Request/Response, DU Configuration Update/Acknowledgement, RRC Setup messages, Authentication signaling carried through RRC, UE Context Setup/Modification, and RRC Reconfiguration. The exact packet numbers and timing are **not fixed**.
 
 **Questions**
 
-1. Which node initiates F1 Setup, and which acknowledges it?
-2. Explain the difference between SCTP association establishment and F1 Setup.
-3. How can a NAS Registration Request be transported over F1-C?
-4. What is the role of UE Context Setup?
-5. Does F1 Setup alone prove successful UE Registration? Explain.
+1. Which node initiates F1 Setup, and which acknowledges it? - The DU initiates the setup as the source is 127.0.0.4 which is DU and CU acknowledges as the destination is 127.0.0.3 which is CU
+<img width="958" height="89" alt="image" src="https://github.com/user-attachments/assets/663d778b-91a1-4a09-8107-d5b279f0e1fd" />
+2. Explain the difference between SCTP association establishment and F1 Setup. - SCTP association establishment creates a reliable transport connection between the CU and DU while F1 Setup occurs after SCTP association establishment and operates at the application layer using the F1AP
+3. How can a NAS Registration Request be transported over F1-C? - the UE first sends a NAS Registration Request to the DU, the DU then forwards the RRC message to the CU over the F1-C interface using F1AP, the CU then extracts the NAS message from the RRC signalling and forwards it to the AMF through the NG interface using NGAP
+4. What is the role of UE Context Setup? - UE Context Setup establishes the necessary UE-specific configuration and resources between the CU and DU
+5. Does F1 Setup alone prove successful UE Registration? Explain. - No, F1 setup only proves that CU and DU have established their F1AP relationship while, UE Registration is a separate procedure involving radio synchronization, RRC connection establishment, NAS authentication, and registration with the AMF in the 5G Core Network. Hence, UE registration could still fail even if F1 setup is successful
 
 **Evidence:** Screenshot with F1 Setup Request/Response and screenshot with at least three UE-associated F1AP messages. Include packet numbers and source/destination addresses.
 
@@ -285,7 +302,6 @@ Internet Protocol (outer CU/DU addresses)
       Tunnel Endpoint Identifier (TEID)
       Encapsulated user payload (if decodable)
 ```
-
 **Important:** The classroom trace showed repeated `GTP T-PDU` packets from `127.0.0.4` (DU) to `127.0.0.3` (CU), confirming traffic on the CU–DU user-plane path. The actual TEID was **not recorded** in the provided screenshot: read the TEID from your own packet details instead of assuming a value.
 
 ### Distinguish F1-U from N3
@@ -299,11 +315,15 @@ Identify the interface using the actual source/destination endpoints and configu
 
 **Questions**
 
-1. Which transport protocol carries F1-U?
-2. What does a GTP-U **TEID** identify?
-3. Which direction is `127.0.0.4 → 127.0.0.3` in this setup?
-4. How would you distinguish F1-U from N3 in a packet capture?
-5. Why do F1-C and F1-U use different transport protocols?
+1. Which transport protocol carries F1-U? - F1-U uses UDP to transport GTP-U packets between the CU-UP and DU
+2. What does a GTP-U **TEID** identify? - The TEID identifies a specific GTP-U tunnel endpoint used to transport user-plane traffic
+3. Which direction is `127.0.0.4 → 127.0.0.3` in this setup? - DU to CU
+4. How would you distinguish F1-U from N3 in a packet capture? - they can be distinguished by examining the source and destination IP addresses and the network endpoints as they use the same port, so they cannot be distinguished by protocol and port number 
+5. Why do F1-C and F1-U use different transport protocols? - F1-C uses SCTP because control-plane signalling requires reliable, ordered delivery and support for multiple streams to ensure correct execution of procedures. While, F1-U uses UDP with GTP-U because user-plane traffic prioritizes low overhead and efficient packet forwarding
+
+<img width="959" height="503" alt="image" src="https://github.com/user-attachments/assets/884312ea-1d98-4675-abde-743a780b9512" />
+
+<img width="959" height="506" alt="image" src="https://github.com/user-attachments/assets/fadaaf20-114a-426e-8028-e7a6dd47f7f9" />
 
 **Evidence:** Screenshot of at least one GTP-U T-PDU, with outer IP addresses, UDP ports, message type, and TEID visible. Record the observed UL and DL packet counts (if both directions are present). Do not assume equal counts.
 
@@ -315,15 +335,15 @@ Complete the table:
 
 | Feature | Lab 3: Monolithic gNB | Lab 4: CU/DU Split |
 |---|---|---|
-| Number of RAN processes | | |
-| Location of RRC/PDCP | | |
-| Location of RLC/MAC/PHY | | |
-| F1-C interface present? | | |
-| F1-U interface present? | | |
-| UE connected to the same 5GC? | | |
-| End-to-end Ping works? | | |
+| Number of RAN processes | 1 | 2 |
+| Location of RRC/PDCP | Monolithic gNB | CU |
+| Location of RLC/MAC/PHY | Monolithic gNB | DU |
+| F1-C interface present? | No | Yes |
+| F1-U interface present? | No | Yes |
+| UE connected to the same 5GC? | Yes | Yes |
+| End-to-end Ping works? | Yes | Yes |
 
-Explain in **3–5 sentences** why splitting a gNB changes the internal RAN interfaces but does not change the UE's need for synchronization, registration and a PDU session.
+Explain in **3–5 sentences** why splitting a gNB changes the internal RAN interfaces but does not change the UE's need for synchronization, registration and a PDU session. - Splitting a gNB separates its functions into CU which handles RRC, PDCP and DU which handles RLC, MAC and PHY. This introduces internal RAN interfaces, F1-C and F1-U for control-plane and user-plane communication between the CU and DU. However, the UE must still perform radio synchronization and RRC connection establishment to communicate with the network, regardless of the gNB architecture. It must also successfully register with the 5G Core Network and establish a PDU session before exchanging user data. Therefore, splitting the gNB changes the internal RAN architecture but does not change the UE's need for synchronization, registration and PDU session
 
 ---
 
